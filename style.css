@@ -1,0 +1,196 @@
+.board-frame {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  border: 20px solid darkslategray; /* dark green like a chalkboard border */
+  border-radius: 30px;
+  box-sizing: border-box;
+  z-index: 999;
+  background: darkslategray; /* fallback background */
+  box-shadow: 0 0 40px rgba(46, 125, 50, 0.6);
+}
+
+
+/* Base reset */
+body {
+  margin: 0;
+  background: darkslategray;
+  overflow: hidden;
+}
+   
+
+
+/* Webcam video as background */
+video {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  transform: scaleX(-1); /* mirror webcam */
+  z-index: 0;
+}
+
+/* Canvas for drawing */
+canvas {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Controls container */
+#controls {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 2;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px 12px;
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
+}
+
+/* Color buttons */
+.color-btn {
+  width: 30px;
+  height: 30px;
+  border: 2px solid white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.color-btn.red { background-color: red; }
+.color-btn.blue { background-color: blue; }
+.color-btn.yellow { background-color: yellow; }
+
+/* Active color button */
+.color-btn.active {
+  outline: 3px solid white;
+  box-shadow: 0 0 10px white;
+}
+
+/* Custom color input */
+#customColor {
+  width: 34px;
+  height: 34px;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  appearance: none;
+  background: transparent;
+  padding: 0;
+}
+
+#customColor::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 50%;
+}
+
+#customColor::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+/* Common button style */
+button {
+  padding: 6px 8px;
+  background: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button i {
+  font-size: 16px;
+}
+
+/* Hover and active effect */
+#controls button:hover,
+#controls input[type="color"]:hover {
+  background-color: #d3d3d3;
+}
+
+#controls button:active,
+#controls input[type="color"]:active {
+  background-color: #bbb;
+}
+
+/* Draw toggle button off state */
+#toggleDrawBtn.off {
+  background: #ccc;
+  color: #000;
+}
+
+/* Eraser active */
+#eraserBtn.active {
+  background: #333;
+  color: white;
+}
+
+/* Tool size slider */
+#toolSizeSlider {
+  width: 100px;
+  cursor: pointer;
+}
+
+/* Size preview circle */
+#toolSizePreview {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid red;
+  border-radius: 50%;
+  background-color: transparent;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  #controls {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+    top: auto;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    justify-content: center;
+    width: 90vw;
+  }
+
+  #toolSizeSlider {
+    width: 80px;
+  }
+
+  #toolSizePreview {
+    width: 16px;
+    height: 16px;
+  }
+
+  button, #customColor {
+    padding: 4px 6px;
+  }
+
+  .color-btn {
+    width: 26px;
+    height: 26px;
+  }
+
+  #toggleDrawBtn {
+    font-size: 14px;
+  }
+
+  .board-frame {
+    border-width: 10px;
+    border-radius: 15px;
+  }
+}
+

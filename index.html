@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hands Canva</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+ <div class="board-frame">
+    <video id="webcam" autoplay playsinline></video>
+    <canvas id="canvas"></canvas>
+
+    <div id="controls">
+      <button class="color-btn red" data-action="color-red"></button>
+      <button class="color-btn blue" data-action="color-blue"></button>
+      <button class="color-btn yellow" data-action="color-yellow"></button>
+      <input type="color" id="customColor" onchange="setCustomColor(this.value)" />
+
+      <button id="eraserBtn" title="Eraser"><i class="fas fa-eraser"></i></button>
+
+      <input type="range" id="toolSizeSlider" min="1" max="100" value="5" />
+      <div id="toolSizePreview"></div>
+
+      <button id="undoBtn" title="Undo"><i class="fas fa-undo"></i></button>
+      <button id="redoBtn" title="Redo"><i class="fas fa-redo"></i></button>
+      <button id="clearBtn" data-action="clear">Clear</button>
+      <button id="toggleDrawBtn">✋ Draw: ON</button>
+    </div>
+ </div>
+
+  <!-- MediaPipe -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
+  <!-- Main -->
+  <script src="script.js"></script>
+</body>
+</html>

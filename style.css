@@ -248,13 +248,13 @@ button i {
   transition: all 0.2s ease;
 }
 
-@media (max-width: 768px) {
+media (max-width: 768px) {
   #controls {
     flex-wrap: wrap;
     gap: 12px;
     padding: 12px;
-    top: auto;
-    bottom: 20px;
+    bottom: auto;
+    top: 10px;
     left: 50%;
     transform: translateX(-50%);
     justify-content: center;
@@ -297,5 +297,6 @@ button i {
     border-radius: 20px;
   }
 }
+
 
 

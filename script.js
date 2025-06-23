@@ -18,13 +18,15 @@ const toolPreview = document.getElementById("toolSizePreview");
 const eraserBtn = document.getElementById("eraserBtn");
 const toggleBtn = document.getElementById("toggleDrawBtn");
 
+let lastX = null;
+let lastY = null;
+
 video.addEventListener('loadedmetadata', () => {
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   ctx.fillStyle = 'rgba(0,0,0,0)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 });
-
 
 function updateToolSizePreview() {
   const size = isEraser ? eraserSize : brushSize;
@@ -81,19 +83,9 @@ toggleBtn.addEventListener('click', () => {
 });
 
 document.addEventListener('keydown', (e) => {
-  if (e.key.toLowerCase() === 'p') {
-    toggleBtn.click();
-  }
-
-  if (e.ctrlKey && e.key.toLowerCase() === 'z') {
-    e.preventDefault();
-    undo();
-  }
-
-  if (e.ctrlKey && e.key.toLowerCase() === 'y') {
-    e.preventDefault();
-    redo();
-  }
+  if (e.key.toLowerCase() === 'p') toggleBtn.click();
+  if (e.ctrlKey && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); }
+  if (e.ctrlKey && e.key.toLowerCase() === 'y') { e.preventDefault(); redo(); }
 });
 
 function clearCanvas() {
@@ -151,8 +143,9 @@ function checkFingerTouch(x, y) {
   const now = Date.now();
   if (now - lastTapTime < TAP_COOLDOWN) return;
 
-  const canvasRect = canvas.getBoundingClientRect(); // ← Get canvas screen position
+  const canvasRect = canvas.getBoundingClientRect();
 
+  // Convert canvas (drawing) coordinates to actual screen position
   const screenX = canvasRect.left + x * (canvasRect.width / canvas.width);
   const screenY = canvasRect.top + y * (canvasRect.height / canvas.height);
 
@@ -171,6 +164,29 @@ function checkFingerTouch(x, y) {
   });
 }
 
+
+function drawInterpolatedLine(x, y) {
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.lineWidth = isEraser ? eraserSize : brushSize;
+  ctx.globalCompositeOperation = isEraser ? 'destination-out' : 'source-over';
+  ctx.strokeStyle = isEraser ? 'rgba(0,0,0,1)' : color;
+
+  if (lastX !== null && lastY !== null) {
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
+  lastX = x;
+  lastY = y;
+}
+
+function stopInterpolatedLine() {
+  lastX = null;
+  lastY = null;
+  saveState();
+}
 
 const hands = new Hands({
   locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
@@ -196,31 +212,12 @@ hands.onResults(results => {
     checkFingerTouch(x, y);
 
     if (drawEnabled && extended) {
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.lineWidth = isEraser ? eraserSize : brushSize;
-      ctx.globalCompositeOperation = isEraser ? 'destination-out' : 'source-over';
-      ctx.strokeStyle = isEraser ? 'rgba(0,0,0,1)' : color;
-
-      if (!drawing) {
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        drawing = true;
-      } else {
-        ctx.lineTo(x, y);
-        ctx.stroke();
-      }
-    } else if (drawing) {
-      drawing = false;
-      ctx.globalCompositeOperation = 'source-over';
-      saveState();
+      drawInterpolatedLine(x, y);
+    } else {
+      stopInterpolatedLine();
     }
   } else {
-    if (drawing) {
-      drawing = false;
-      ctx.globalCompositeOperation = 'source-over';
-      saveState();
-    }
+    stopInterpolatedLine();
   }
 });
 
@@ -229,7 +226,8 @@ const camera = new Camera(video, {
     await hands.send({ image: video });
   },
   width: 1280,
-  height: 720
+  height: 720,
+  fps: 60
 });
 camera.start();
 
@@ -237,8 +235,7 @@ setColor('red');
 toolSlider.value = brushSize;
 updateToolSizePreview();
 
-
-// Optional: Support direct touch drawing for mobile
+// ✅ Optional: Mobile direct touch support
 canvas.addEventListener('touchstart', (e) => {
   e.preventDefault();
   const touch = e.touches[0];
@@ -246,6 +243,8 @@ canvas.addEventListener('touchstart', (e) => {
   const y = touch.clientY;
   ctx.beginPath();
   ctx.moveTo(x, y);
+  lastX = x;
+  lastY = y;
   drawing = true;
 });
 
@@ -255,13 +254,11 @@ canvas.addEventListener('touchmove', (e) => {
     const touch = e.touches[0];
     const x = touch.clientX;
     const y = touch.clientY;
-    ctx.lineTo(x, y);
-    ctx.stroke();
+    drawInterpolatedLine(x, y);
   }
 });
 
 canvas.addEventListener('touchend', () => {
   drawing = false;
-  saveState();
+  stopInterpolatedLine();
 });
-

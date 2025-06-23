@@ -46,7 +46,7 @@ canvas {
 #controls {
   position: absolute;
   top: 15px;
-  left: 15px;
+  left: 30%;
   z-index: 2;
   display: flex;
   gap: 10px;
@@ -153,101 +153,11 @@ button i {
   transition: all 0.2s ease;
 }
 
-.color-btn {
-  width: 30px;
-  height: 30px;
-  border: 2px solid white;
-  border-radius: 6px;
-  cursor: pointer;
+@media (max-width: 1024px){
+    #controls{
+      left:20%;
+    }
 }
-
-.color-btn.red { background-color: red; }
-.color-btn.blue { background-color: blue; }
-.color-btn.yellow { background-color: yellow; }
-
-/* Active color button */
-.color-btn.active {
-  outline: 3px solid white;
-  box-shadow: 0 0 10px white;
-}
-
-/* Custom color input */
-#customColor {
-  width: 34px;
-  height: 34px;
-  border: 2px solid white;
-  border-radius: 50%;
-  cursor: pointer;
-  appearance: none;
-  background: transparent;
-  padding: 0;
-}
-
-#customColor::-webkit-color-swatch-wrapper {
-  padding: 0;
-  border-radius: 50%;
-}
-
-#customColor::-webkit-color-swatch {
-  border: none;
-  border-radius: 50%;
-}
-
-/* Common button style */
-button {
-  padding: 6px 8px;
-  background: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-button i {
-  font-size: 16px;
-}
-
-/* Hover and active effect */
-#controls button:hover,
-#controls input[type="color"]:hover {
-  background-color: #d3d3d3;
-}
-
-#controls button:active,
-#controls input[type="color"]:active {
-  background-color: #bbb;
-}
-
-/* Draw toggle button off state */
-#toggleDrawBtn.off {
-  background: #ccc;
-  color: #000;
-}
-
-/* Eraser active */
-#eraserBtn.active {
-  background: #333;
-  color: white;
-}
-
-/* Tool size slider */
-#toolSizeSlider {
-  width: 100px;
-  cursor: pointer;
-}
-
-/* Size preview circle */
-#toolSizePreview {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid red;
-  border-radius: 50%;
-  background-color: transparent;
-  pointer-events: none;
-  transition: all 0.2s ease;
-}
-
 
 @media (max-width: 768px) {
   #controls {
@@ -306,3 +216,7 @@ button i {
     border-radius: 20px;
   }
 }
+
+
+
+

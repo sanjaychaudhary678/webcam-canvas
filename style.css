@@ -156,41 +156,51 @@ button i {
 @media (max-width: 768px) {
   #controls {
     flex-wrap: wrap;
-    gap: 8px;
-    padding: 8px;
+    gap: 12px;
+    padding: 12px;
     top: auto;
-    top: 10px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     justify-content: center;
-    width: 90vw;
-  }
-
-  #toolSizeSlider {
-    width: 80px;
-  }
-
-  #toolSizePreview {
-    width: 16px;
-    height: 16px;
-  }
-
-  button, #customColor {
-    padding: 4px 6px;
+    width: 95vw;
+    font-size: 16px;
   }
 
   .color-btn {
-    width: 26px;
-    height: 26px;
+    width: 34px;
+    height: 34px;
+  }
+
+  #customColor {
+    width: 38px;
+    height: 38px;
+  }
+
+  button {
+    padding: 8px 10px;
+    font-size: 16px;
+  }
+
+  #toolSizeSlider {
+    width: 100px;
+  }
+
+  #toolSizePreview {
+    width: 22px;
+    height: 22px;
+    border-width: 2px;
   }
 
   #toggleDrawBtn {
-    font-size: 14px;
+    font-size: 16px;
+    padding: 8px 12px;
   }
 
   .board-frame {
-    border-width: 10px;
-    border-radius: 15px;
+    border-width: 12px;
+    border-radius: 20px;
   }
 }
+
 

@@ -151,10 +151,16 @@ function checkFingerTouch(x, y) {
   const now = Date.now();
   if (now - lastTapTime < TAP_COOLDOWN) return;
 
+  const canvasRect = canvas.getBoundingClientRect(); // ← Get canvas screen position
+
+  const screenX = canvasRect.left + x * (canvasRect.width / canvas.width);
+  const screenY = canvasRect.top + y * (canvasRect.height / canvas.height);
+
   const allButtons = document.querySelectorAll('#controls button, #controls input');
   allButtons.forEach(btn => {
     const rect = btn.getBoundingClientRect();
-    if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+    if (screenX >= rect.left && screenX <= rect.right &&
+        screenY >= rect.top && screenY <= rect.bottom) {
       if (btn.dataset.action) {
         handleTouchAction(btn.dataset.action);
       } else {
@@ -164,6 +170,7 @@ function checkFingerTouch(x, y) {
     }
   });
 }
+
 
 const hands = new Hands({
   locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
